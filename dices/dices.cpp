@@ -1,56 +1,67 @@
-﻿#include <iostream>
+#include <iostream>
 #include <time.h>
 #include <stdlib.h>
-#include <algorithm> // Подключаем библиотеку алгоритмов
+#include <algorithm>
 
 using namespace std;
 
+const int n = 5;
+
+bool allSame(const int arr[]) {
+    for (int i = 1; i < n; i++) {
+        if (arr[i] != arr[0]) {
+            return false;
+        }
+    }
+    return true;
+}
+
 int main() {
-	setlocale(LC_ALL, "");
-	srand(time(NULL)); // Задаем зерно
+    setlocale(LC_ALL, "");
+    srand(time(NULL));
 
-	const int n = 2; // Указываем размер массива с костями
+    int dicesBot[n];
+    int dicesPlayer[n];
 
-	int dicesBot[n]; // Массив костей бота
-	int dicesPlayer[n]; // Массива костей игрока
+    cout << "Кидает бот: " << endl;
+    for (int i = 0; i < n; i++) {
+        dicesBot[i] = 1 + rand() % 6;
+        cout << dicesBot[i] << " ";
+    }
+    cout << endl;
 
-	// Заполнение массива костей бота случайными числами
-	cout << "Кидает бот: " << endl;
-	for (int i = 0; i < n; i++) {
-		dicesBot[i] = 1 + rand() % 6;
-		cout << dicesBot[i] << " ";
-	}
-	cout << endl;
+    cout << "Нажмите что-нибудь, чтобы бросить кости";
+    cin.get();
 
+    cout << "Бросаем кости..." << endl;
+    for (int i = 0; i < n; i++) {
+        dicesPlayer[i] = 1 + rand() % 6;
+        cout << dicesPlayer[i] << " ";
+    }
+    cout << endl;
 
-	cout << "Нажмите что-нибудь, чтобы бросить кости";
-	cin.get();
+    int sumBot = 0, sumPlayer = 0;
 
-	// Заполнение массива костей игрока случайными числами
-	cout << "Бросаем кости..." << endl;
-	for (int i = 0; i < n; i++) {
-		dicesPlayer[i] = 1 + rand() % 6;
-		cout << dicesPlayer[i] << " ";
-	}
-	cout << endl;
+    for (int i = 0; i < n; i++) {
+        sumBot += dicesBot[i];
+        sumPlayer += dicesPlayer[i];
+    }
 
-	// Сортируем массивы функцией sort из algorithm
-	sort(dicesBot, dicesBot + n);
-	sort(dicesPlayer, dicesPlayer + n);
+    if (allSame(dicesBot)) {
+        cout << "Бот победил";
+    }
+    else if (allSame(dicesPlayer)) {
+        cout << "Игрок победил";
+    }
+    else if (sumBot > sumPlayer) {
+        cout << "Бот победил с большей суммой: " << sumBot;
+    }
+    else if (sumPlayer > sumBot) {
+        cout << "Игрок победил с большей суммой: " << sumPlayer;
+    }
+    else {
+        cout << "Ничья!";
+    }
 
-	// Сравнение всех элементов в массиве на их одинаковость
-	bool eq = true; // Заранее предпологаю что они все одинаковы
-	int dEq = dicesBot[0]; // Беру первый элемент в качество эквивалента
-	for (int d : dicesBot) {
-		if (d != dEq) { // Если один из элементов не равент первому, то значит массив содержит разные элементы
-			eq = false;
-			break;
-		}
-	}
-
-	if (eq) {
-		cout << "Бот победил";
-	}
-
-	return 0;
+    return 0;
 }
